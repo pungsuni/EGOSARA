@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 30.//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.NDAO">
+
+    <!-- 공지 작성 -->
+    <insert id="nWrite" parameterType="notice">
+        INSERT INTO NOTICE VALUES(NNUM_SEQ.NEXTVAL, #{nId}, #{nTitle}, #{nContent}, SYSDATE,
+                                  #{nPhotoName ,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 공지 목록 -->
+    <select id="nList" resultType="notice">
+        SELECT * FROM NOTICE ORDER BY NNUM DESC
+    </select>
+
+    <!-- 공지 상세보기 -->
+    <select id="nView" parameterType="int" resultType="notice">
+        SELECT * FROM NOTICE WHERE NNUM=#{nNum}
+    </select>
+
+    <!-- 공지 수정 -->
+    <update id="nModify" parameterType="notice">
+        UPDATE NOTICE SET NID=#{nId}, NTITLE=#{nTitle}, NCONTENT=#{nContent},
+                          NPHOTONAME=#{nPhotoName ,jdbcType=VARCHAR} WHERE NNUM=#{nNum}
+    </update>
+
+    <!-- 공지 삭제 -->
+    <delete id="nDelete" parameterType="int">
+        DELETE FROM NOTICE WHERE NNUM=#{nNum}
+    </delete>
+
+
+</mapper>

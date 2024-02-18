@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE-edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Group" content="SDS"/>
+    <meta name="author" content="seung"/>
+    <meta name="description" content="EgoSara index페이지"/>
+    <title>Spring Boot - EgoSara</title>
+    <link rel="icon" href="/img/Fevicon.png" type="image/png">
+    <link rel="stylesheet" href="/vendors/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendors/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/vendors/themify-icons/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/nice-select/nice-select.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!--================ Start Header Menu Area =================-->
+<header class="header_area">
+    <div class="main_menu">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand logo_h" href="/index_move"><img src="img/logo6.jpg" alt=""></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+                        <li class="nav-item active"><a class="nav-link" href="/index_move">Home</a></li>
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">상품</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="/gList?gCate=0">상품목록</a></li>
+                                <!-- 업체 로그인 시에만-->
+                                <li  th:if="${session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/writeForm">상품등록</a></li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">레시피</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="/rList">레시피목록</a></li>
+                                <li th:if="${session.loginId ne null}" class="nav-item"><a class="nav-link" href="/rWriteForm">레시피등록</a></li>
+                            </ul>
+                        </li>
+                        <!-- 로그인 했을 때만 마이페이지 뜨도록 -->
+                        <li th:if="${session.loginId ne null || session.sloginId ne null}" class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">마이페이지</a>
+                            <ul class="dropdown-menu">
+                                <!-- 관리자 일때 회원, 업체, 쿠폰 관리 -->
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/cList">회원 목록</a></li>
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/sList">업체 목록</a></li>
+
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/couList">쿠폰 목록</a></li>
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/couWriteForm">쿠폰 등록</a></li>
+
+                                <!-- 회원일때는 회원-내정보 / 업체일때는 업체-내정보 -->
+                                <li th:if="${session.sloginId eq null && session.loginId ne null}" class="nav-item"><a class="nav-link" th:href="@{cView(cId=${session.loginId})}">내정보</a></li>
+                                <li th:if="${session.loginId eq null && session.sloginId ne null}" class="nav-item"><a class="nav-link" th:href="@{sView(sId=${session.sloginId})}">내정보</a></li>
+
+                                <li class="nav-item"><a class="nav-link" th:href="@{mycouList(cId=${session.loginId})}">쿠폰함</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{getDibList(dId=${session.loginId})}">내찜목록</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{getOrderList(oId=${session.loginId})}">주문내역</a></li>
+
+                                <li th:if="${session.loginId ne null}" class="nav-item"><a class="nav-link" href="/cLogout">로그아웃</a></li>
+                                <li th:if="${session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/sLogout">로그아웃</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">고객센터</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="/nList">공지사항 목록</a></li>
+                                <li th:if="${session.loginId eq 'admin' || session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/nWriteForm">공지사항 작성</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/qList">QnA 목록</a></li>
+                                <li th:if="${session.sloginId eq 'admin' || session.loginId ne null}" class="nav-item"><a class="nav-link" href="/qWriteForm">QNA 작성</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- 장바구니 이동 -->
+                    <ul class="nav-shop">
+                        <li class="nav-item">
+                            <a th:href="@{bView(bId=${session.loginId})}">
+                                <button>
+                                    <i class="ti-shopping-cart"> </i>
+                                </button>
+                            </a>
+                        </li>
+                        <!--
+                            로그인, 회원가입 (아직 미완)
+                            <button th:if="${session.loginId eq null && session.sloginId eq null}" onclick="location.href='cJoinForm'">회원가입</button>
+                            <button th:if="${session.loginId eq null && session.sloginId eq null}" onclick="location.href='sJoinForm'">업체 회원가입</button>
+                        -->
+                        <li  class="nav-item" th:if="${session.loginId eq null && session.sloginId eq null}">
+                            <a class="button button-header" href="/cLoginForm">LOGIN</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<!--================ End Header Menu Area =================-->
+
+<main class="site-main">
+
+    <!--================ Hero banner start =================-->
+    <section class="hero-banner">
+        <div class="container">
+            <div class="row no-gutters align-items-center pt-60px">
+                <div class="col-5 d-none d-sm-block">
+                    <div class="hero-banner__img">
+                        <img class="img-fluid" src="img/home/hero-banner.png" alt="">
+                    </div>
+                </div>
+                <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
+                    <div class="hero-banner__content">
+                        <h4>쉽고 편하게 식재료를 구매하세요!</h4>
+                        <h1>EGOSARA</h1>
+                        <!--<p></p>-->
+                        <a class="button button-hero" href="/gList?gCate=0">재료 사러가기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================ Hero banner start =================-->
+
+    <!-- ================ trending product section start ================= -->
+    <section class="section-margin calc-60px">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <h2>HOT <span class="section-intro__style">GOODS</span></h2>
+            </div>
+            <!-- HOTGOODS 있는 곳!! -->
+            <div id="hotGoodsList" class="row">
+                <!-- ajax로 정보 가져와서 반복  -->
+            </div>
+        </div>
+    </section>
+    <!-- ================ trending product section end ================= -->
+
+    <!-- ================ offer section start ================= -->
+    <section class="offer" id="parallax-1" data-anchor-target="#parallax-1" data-300-top="background-position: 20px 30px" data-top-bottom="background-position: 0 20px">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5">
+                    <div class="offer__content text-center">
+                        <h3>COUPON</h3>
+                        <h4>쿠폰으로 저렴하게 구매하세요.</h4>
+                        <a class="button button--active mt-3 mt-xl-4" href="/couList">쿠폰 받으러가기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- ================ offer section end ================= -->
+
+
+    <!-- ================ Blog section start ================= -->
+    <section class="레시피">
+        <br/><br/><br/>
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <h2>인기 레시피 <span class="section-intro__style"> TOP3</span></h2>
+            </div>
+            <!-- top3 recipe 있는 곳!!!! -->
+            <div id="topRecipe" class="row">
+                <!-- ajax로 정보 가져와서 반복할 내용 -->
+            </div>
+        </div>
+    </section>
+    <!-- ================ Blog section end ================= -->
+</main>
+
+
+<!--================ Start footer Area  =================-->
+<footer class="footer">
+    <div class="footer-area">
+        <div class="container">
+            <div class="row section_gap">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title large_title">COMPANY</h4>
+                        <p>
+                            우리 사이트를 소개합니다!
+                        </p>
+                        <p>
+                            장소와 시간의 제약없이<br/>간편하게 장을 볼 수 있음과 동시에<br/>다양한 레시피를 공유하는 사이트
+
+                        </p>
+                    </div>
+                </div>
+                <div class="offset-lg-1 col-lg-2 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title">Quick Menu</h4>
+                        <ul class="list">
+
+                            <li><a href="/gList?gCate=0">GOODS</a></li>
+                            <li><a href="/rList">RECIPE</a></li>
+                            <li th:if="${session.loginId ne null || session.sloginId ne null}">
+                                <a th:if="${session.sloginId eq null && session.loginId ne null}" th:href="@{cView(cId=${session.loginId})}">마이페이지</a>
+                                <a th:if="${session.loginId eq null && session.sloginId ne null}" th:href="@{sView(sId=${session.sloginId})}">마이페이지</a>
+                            </li>
+                            <li><a href="/nList">NOTICE</a></li>
+                            <li><a href="/qList">QNA</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title">Contact Us</h4>
+                        <div class="ml-40">
+                            <p class="sm-head">
+                                <span class="fa fa-location-arrow"></span>
+                                Office
+                            </p>
+                            <p>22223, 인천 미추홀구 매소홀로 488번길 6-32 태승빌딩 5층
+                            <br/>인천일보 아카데미
+                            </p>
+
+
+                            <p class="sm-head">
+                                <span class="fa fa-envelope"></span>
+                                Email
+                            </p>
+                            <p>
+                                aksenclzlsvlwk@gmail.com <br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 부트스트랩 출처 -->
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row d-flex">
+                <p class="col-lg-12 footer-text text-center">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--================ End footer Area  =================-->
+</body>
+
+<script type="text/javascript" src="/js/jquery3.6.0.js"></script>
+<script type="text/javascript">
+    // 장바구니 버튼 & 좋아요 버튼 클릭시 로그인 여부 확인하기 위한 전역변수
+    var cmember = '[[${session.loginId}]]';
+    var smember = '[[${session.sloginId}]]';
+
+    $(document).ready(function(){
+        // Hot Goods
+        // 가져가는 데이터는 없음!
+        // 가져오는 데이터만 존재
+        $.ajax({
+            type : "POST",
+            url : "hotGoodsList",
+            dataType : "json",
+            success : function(hotGoods) {
+                // 성공
+                List_goods(hotGoods);
+            } ,
+            error : function() {
+                // 실패
+            }
+        });
+
+        // Top3 Recipe
+        $.ajax({
+            type : "POST",
+            url : "topRecipeList",
+            dataType : "json",
+            success : function(topCook) {
+                // 성공
+                List_recipe(topCook);
+            } ,
+            error : function() {
+                // 실패
+            }
+        });
+    });
+
+    function List_goods(hotGoods){
+        // 회원 로그인인지 업체 로그인인지 확인하기 위해 가져오는 변수
+        let output = "";
+
+        for (var i=0; i<8; i++) {
+
+            output += "<div class='col-md-6 col-lg-4 col-xl-3'>";
+            output += "<div class='card text-center card-product'>";
+
+            output += "<div class='card-product__img'>";
+            output += "<img class='card-img' src='/img/goods/" + hotGoods[i].gphoto  + "' alt='' />";
+            output += "<ul class='card-product__imgOverlay'>";
+            output += "<li><button onclick='checkLogin_cart(" + hotGoods[i].gnum + ")'><i class='ti-shopping-cart'></i></button></li>";
+            output += "</ul>";
+
+            output += "</div>";
+
+            output += "<div class='card-body'>";
+            output += "<p>" + hotGoods[i].gcate + "</p>";
+            output += "<h4 class='card-product__title'><a href='single-product.html'>" + hotGoods[i].gname + "</a></h4>";
+            output += "<p class='card-product__price'>" + hotGoods[i].gprice + "</p>";
+            output += "</div>";
+
+            output += "</div>";
+            output += "</div>";
+        }
+        $("#hotGoodsList").html(output);
+
+    }
+    function List_recipe(topCook){
+        let output = "";
+
+        for (var j=0; j<3; j++) {
+
+            output += "<div class='col-md-6 col-lg-4 mb-4 mb-lg-0'>";
+            output += "<div class='card card-blog'>";
+
+            output += "<div class='card-blog__img'>";
+            output += "<img class='card-img rounded-0' src='/img/recipe/" + topCook[j].rphotoName1 + "' alt=''>";
+            output += "</div>";
+
+            output += "<div class='card-body'>";
+            output += "<ul class='card-blog__info'>";
+            output += "<li><a href='/rView?rNum=" + topCook[j].rnum + "'>" + topCook[j].rid + "</a></li>";
+            output += "<li><a href='/rView?rNum=" + topCook[j].rnum + "'><i class='ti-comments-smiley'></i> 댓글보기</a></li>";
+            output += "</ul>";
+
+            output += "<h4 class='card-blog__title'><a href='/rView?rNum=" + topCook[j].rnum + "'>" + topCook[j].rname + "</a></h4>";
+            output += "<a class='card-blog__link' href='/rView?rNum=" + topCook[j].rnum + "'>자세히 보기 <i class='ti-arrow-right'></i></a>";
+            output += "</div>";
+
+            output += "</div>";
+            output += "</div>";
+        }
+
+        $("#topRecipe").html(output);
+    }
+
+    function checkLogin_cart(gnum){
+        if(cmember == "") {
+            alert("로그인 후 이용해주세요.");
+        } else {
+            location.href="gView?gNum=" + gnum;
+        }
+    }
+
+</script>
+
+
+<script src="/vendors/jquery/jquery-3.2.1.min.js"></script>
+<script src="/vendors/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/vendors/skrollr.min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/vendors/nice-select/jquery.nice-select.min.js"></script>
+<script src="/vendors/jquery.ajaxchimp.min.js"></script>
+<script src="/vendors/mail-script.js"></script>
+<script src="/js/main.js"></script>
+
+
+</html>

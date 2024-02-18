@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE-edge"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="Group" content="SDS"/>
+  <meta name="author" content="seung"/>
+  <meta name="description" content="EgoSara S_Mypage 페이지"/>
+  <title>Spring Boot - EgoSara</title>
+</head>
+<body>
+<h2 th:text="${session.loginId} + '님의 마이페이지 입니다'"></h2>
+
+<form action="getDibList" method="get">
+  <input type="hidden" name="dId" th:value="${session.loginId}" />
+  <button>내 찜 목록</button>
+</form>
+
+<form action="getOrderList" method="get">
+  <input type="hidden" name="oId" th:value="${session.loginId}" />
+  <button>주문내역</button>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 30.//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.QDAO">
+
+    <!-- QNA 작성 -->
+    <insert id="qWrite" parameterType="qna">
+        INSERT INTO QNA VALUES(QNUM_SEQ.NEXTVAL, #{qId}, #{qTitle}, #{qContent}, SYSDATE,
+                               0 , #{qPhotoName ,jdbcType=VARCHAR}, #{qPublic})
+    </insert>
+
+    <!-- QNA 목록 : 공개 비공개 모두 -->
+    <select id="qList" resultType="qna">
+        SELECT * FROM QNA ORDER BY QNUM DESC
+    </select>
+
+    <!-- QNA 목록 : 공개만 -->
+    <select id="qList1" resultType="qna">
+        SELECT * FROM QNA WHERE QPUBLIC='공개' ORDER BY QNUM DESC
+    </select>
+
+
+    <!-- QNA 조회수 -->
+    <update id="qCount" parameterType="int">
+        UPDATE QNA SET QHIT = QHIT+1 WHERE QNUM=#{qNum}
+    </update>
+
+    <!-- QNA 상세보기 -->
+    <select id="qView" parameterType="int" resultType="qna">
+        SELECT * FROM QNA WHERE QNUM=#{qNum}
+    </select>
+
+    <!-- QNA 수정 -->
+    <update id="qModify" parameterType="qna">
+        UPDATE QNA SET QID=#{qId}, QTITLE=#{qTitle}, QCONTENT=#{qContent},
+                       QPHOTONAME=#{qPhotoName ,jdbcType=VARCHAR}, QPUBLIC=#{qPublic} WHERE QNUM=#{qNum}
+    </update>
+
+    <!-- QNA 삭제 -->
+    <delete id="qDelete" parameterType="int">
+        DELETE FROM QNA WHERE QNUM=#{qNum}
+    </delete>
+
+    <!-- 댓글 목록 -->
+    <select id="qcList" parameterType="int" resultType="qcomment">
+        SELECT * FROM QCOMMENT WHERE QCBNUM=#{qcbNum} ORDER BY QCNUM DESC
+    </select>
+
+    <!-- 댓글 작성 -->
+    <insert id="qcWrite" parameterType="qcomment">
+        INSERT INTO QCOMMENT VALUES(QCNUM_SEQ.NEXTVAL, #{qcbNum}, #{qcId}, #{qcContent}, SYSDATE)
+
+    </insert>
+
+    <!-- 댓글 삭제 -->
+    <delete id="qcDelete" parameterType="qcomment">
+        DELETE FROM QCOMMENT WHERE QCNUM=#{qcNum}
+    </delete>
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.BDAO">
+    <insert id="bGetGoods" parameterType="basket">
+        INSERT INTO BASKET VALUES (#{bId}, #{bNum}, #{buyNo}, 'no')
+    </insert>
+
+    <select id="bView" parameterType="String" resultType="basket">
+        SELECT M.CID AS BID, G.GNUM AS BNUM , G.GCATE AS BTYPE, G.GNAME AS BNAME, G.GPRICE AS BPRICE, B.BUYNO, G.GSTOCK AS BSTOCK, B.BSELECT
+        FROM GOODS G, CMEMBER M, BASKET B
+        WHERE M.CID = B.BID AND B.BNUM = G.GNUM AND BID = #{bId} AND B.BSELECT = 'no'
+    </select>
+
+    <update id="bSelectIn" parameterType="basket">
+        UPDATE BASKET SET BSELECT = 'y' WHERE BID = #{bId} AND BNUM = #{bNum}
+    </update>
+
+    <select id="bSelectList" parameterType="String" resultType="basket">
+        SELECT M.CID AS BID , G.GNUM AS BNUM, G.GCATE AS BTYPE, G.GNAME AS BNAME, G.GPRICE AS BPRICE , B.BUYNO, G.GSTOCK AS BSTOCK, B.BSELECT
+        FROM GOODS G, CMEMBER M, BASKET B
+        WHERE M.CID = B.BID AND B.BNUM = G.GNUM AND B.BID=#{bId} AND B.BSELECT = 'y'
+    </select>
+
+    <delete id="bDelete" parameterType="basket">
+        DELETE FROM BASKET WHERE BID = #{bId} AND BNUM = #{bNum}
+    </delete>
+</mapper>

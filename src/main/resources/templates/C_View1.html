@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="author" content="jmj"/>
+    <meta name="description" content="EGOSARA 프로젝트 회원 내정보 보기 페이지">
+    <title>EGOSARA_회원 내정보 보기</title>
+</head>
+<body>
+<table>
+    <caption>회원 상세보기</caption>
+
+    <tr>
+        <th>아이디</th>
+        <td th:text="${cmember.cId}"></td>
+    </tr>
+
+    <tr>
+        <th>닉네임</th>
+        <td th:text="${cmember.cNickname}"></td>
+    </tr>
+
+    <tr>
+        <th>이름</th>
+        <td th:text="${cmember.cName}"></td>
+    </tr>
+
+    <tr>
+        <th>생일</th>
+        <td th:text="${cmember.cBirth}"></td>
+    </tr>
+
+    <tr>
+        <th>전화번호</th>
+        <td th:text="${cmember.cPhone}"></td>
+    </tr>
+
+    <tr>
+        <th>주소</th>
+        <td th:text="${cmember.cAddr}"></td>
+    </tr>
+
+    <tr>
+        <th>이메일</th>
+        <td th:text="${cmember.cEmail}"></td>
+    </tr>
+
+    <tr>
+        <th>프로필</th>
+        <td><img th:src="@{img/profile/{cProfileName}(cProfileName=${cmember.cProfileName})}" width="200px"/></td>
+    </tr>
+
+    <tr>
+
+        <!-- cModiForm로 cId값 보내기 -->
+        <td><a th:if="${session.loginId eq cmember.cId || session.loginId eq 'admin'}" th:href="@{cModiForm(cId=${cmember.cId})}"><button>수정</button></a></td>
+
+        <!-- cDelete -->
+        <td><a th:if="${session.loginId eq cmember.cId || session.loginId eq 'admin' }" th:href="@{cDelete(cId=${cmember.cId})}"><button>탈퇴</button></a></td>
+    </tr>
+
+</table>
+
+</body>
+
+<script>
+    let cId = '[[${cmember.cId}]]';
+    let loginId = '[[${session.loginId}]]';
+
+    console.log("cId : " + cId);
+    console.log("loginId : " + loginId);
+
+</script>
+</html>

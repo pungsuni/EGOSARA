@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.GDAO">
+    <!-- 추가!!!!! -->
+    <!-- 인덱스에 보여질 인기상품 목록 가져오기 -->
+    <select id="hotGoodsList" resultType="goods">
+        SELECT * FROM GOODS ORDER BY GHIT DESC
+    </select>
+    <select id="topRecipeList" resultType="recipe">
+        SELECT * FROM RECIPE ORDER BY RHIT DESC
+    </select>
+
+
+    <!-- 상품 글쓰기 -->
+    <insert id="gWrite" parameterType="goods">
+        INSERT INTO GOODS VALUES (GODS_SEQ.NEXTVAL, #{gId}, #{gName}, #{gPrice},
+                                  #{gDate}, 0, #{gStock},#{gContent}, #{gPhoto}, #{gCate}, 0)
+    </insert>
+
+    <!-- 상품 목록보기 -->
+    <select id="gList" resultType="goods">
+        SELECT * FROM GOODS ORDER BY GNUM DESC
+    </select>
+
+    <!-- 상품 조회수 -->
+    <update id="gCount" parameterType="int">
+        UPDATE GOODS SET GHIT = GHIT+1 WHERE GNUM=#{gNum}
+    </update>
+
+    <!-- 상품 자세히 보기 -->
+    <select id="gView" parameterType="int" resultType="goods">
+        SELECT * FROM GOODS WHERE GNUM=#{gNum}
+    </select>
+
+    <!-- 상품 글 수정 -->
+    <update id="gModify" parameterType="goods">
+        UPDATE GOODS SET GID=#{gId}, GNAME=#{gName}, GPRICE=#{gPrice},GDATE=#{gDate}, GSTOCK=#{gStock}, GCONTENT=#{gContent}, GPHOTO=#{gPhoto} WHERE GNUM=#{gNum}
+    </update>
+
+    <!-- 장바구니 삭제 -->
+    <delete id="gbDelete" parameterType="int">
+        DELETE FROM BASKET WHERE BNUM = #{gNum}
+    </delete>
+
+    <delete id="gccDelete" parameterType="int">
+        DELETE FROM GCCOMENT WHERE GCNUM = #{gNum}
+    </delete>
+
+    <delete id="gdDelete" parameterType="int">
+        DELETE FROM DIB WHERE DNUM = #{gNum}
+    </delete>
+
+    <!-- 상품 글 삭제 -->
+    <delete id="gDelete" parameterType="goods">
+        DELETE FROM GOODS WHERE GNUM = #{gNum} AND GID = #{gId}
+    </delete>
+
+    <!-- 상품 글 목록 카테고리 -->
+    <select id="gList1" parameterType="String" resultType="goods">
+        SELECT * FROM GOODS WHERE GCATE = #{gCate}
+    </select>
+
+    <!-- 리뷰 목록보기 -->
+    <select id="gcList" parameterType="int" resultType="gccoment">
+        SELECT * FROM GCCOMENT WHERE GCNUM=#{gcNum} ORDER BY GNO DESC
+    </select>
+
+    <!-- 리뷰 작성자 특정 -->
+    <select id="example" parameterType="gccoment" resultType="ordering">
+        SELECT ONUM FROM ORDERING WHERE OID= #{gcId} AND OBNUM = #{gcNum}
+    </select>
+
+    <!-- 리뷰 작성 -->
+    <insert id="gcWrite" parameterType="gccoment">
+        INSERT INTO GCCOMENT VALUES(GCM_SEQ.NEXTVAL, #{gcNum}, #{gcId}, #{gcContent}, #{gcPhoto}, #{gcStar}, SYSDATE )
+    </insert>
+
+    <!-- 리뷰 삭제 -->
+    <delete id="gcDelete" parameterType="gccoment">
+        DELETE FROM GCCOMENT WHERE GNO=#{gNo} AND GCID=#{gcId} AND GCNUM = #{gcNum}
+    </delete>
+
+    <!-- 상품 검색 -->
+    <select id="gSearch" parameterType="String" resultType="goods">
+        SELECT * FROM GOODS WHERE GNAME LIKE '%'||#{keyword}||'%' ORDER BY GNUM DESC
+    </select>
+
+    <select id="gPriceSearch" parameterType="goods" resultType="goods">
+        SELECT * FROM GOODS WHERE GPRICE BETWEEN #{gPrice1} AND #{gPrice2} ORDER BY GNUM DESC
+    </select>
+
+    <!-- 상품 별점 평균 업데이트 -->
+    <update id="gcStarUpdate" parameterType="gccoment">
+        UPDATE GOODS SET GSTAR=(SELECT AVG(GCSTAR) FROM GCCOMENT WHERE GCNUM = #{gcNum}) WHERE GNUM = #{gcNum}
+    </update>
+
+
+</mapper>

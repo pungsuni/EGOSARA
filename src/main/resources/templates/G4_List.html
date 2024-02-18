@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board_게시글목록</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table.css}">
+</head>
+<body>
+<table>
+    <div id="gPriceSel1">
+        <form action="gSearch">
+            <select id="selectVal" name="selectVal" onchange="gPriceSel()">
+                <option value="gName">상품 이름</option>
+                <option value="gPrice">상품 가격</option>
+            </select>
+
+            <input type="text" name="keyword">
+
+            <input type="submit" value="검색">
+        </form>
+    </div>
+
+    <br>
+    <caption>게시글목록</caption>
+    <a href="gList">전체보기</a>
+    <a href="g1List">채소</a>
+    <a href="g2List">과일</a>
+    <a href="g3List">수산/해산물</a>
+    <a href="g4List">육류/계란류</a>
+    <tr>
+        <th>글번호</th>
+        <th>상품이름</th>
+        <th>가격</th>
+        <th>판매자</th>
+        <th>작성일</th>
+        <th>조회수</th>
+    </tr>
+    <tr th:each="list : ${goods4List1}">
+        <td th:text="${list.gNum}">글번호</td>
+        <td><a th:text="${list.gName}" th:href="@{gView(gNum=${list.gNum})}"></a></td>
+        <td th:text="${list.gPrice}">가격</td>
+        <td th:text="${list.gId}">작성자</td>
+        <td th:text="${list.gDate}">작성일</td>
+        <td th:text="${list.gHit}">조회수</td>
+    </tr>
+</table>
+
+
+</body>
+
+<script>
+
+    // console.log(selectVal);
+
+
+
+    function gPriceSel() {
+        console.log("gPriceSel실행");
+        let selectVal = document.getElementById("selectVal").value;
+        let gPriceSel1 = document.getElementById("gPriceSel1");
+
+        let text="";
+
+        if (selectVal == 'gPrice') {
+            console.log(selectVal+" 실행");
+            //
+            text += "<form action='gSearch'>";
+            text += "<select id='selectVal' name='selectVal' onchange='gPriceSel()'>";
+            text += "<option value='gName'>상품 이름</option>";
+            text += "<option value='gPrice' selected='selected'>상품 가격</option>";
+            text += "</select>";
+            text += "&nbsp;&nbsp; <input type='text' name='gPrice1'>원 ~ <input type='text' name='gPrice2'>원";
+            text += "<input type='submit' value='검색'>";
+            text += "</form>";
+            gPriceSel1.innerHTML = text;
+        } else if (selectVal == 'gName') {
+            console.log(selectVal+" 실행");
+            text += "<form action='gSearch'>";
+            text += "<select id='selectVal' name='selectVal' onchange='gPriceSel()'>";
+            text += "<option value='gName' selected='selected'>상품 이름</option>";
+            text += "<option value='gPrice'>상품 가격</option>";
+            text += "</select>";
+            text += "&nbsp;&nbsp;<input type='text' name='keyword'>";
+            text += "<input type='submit' value='검색'>";
+            text += "</form>";
+
+            gPriceSel1.innerHTML = text;
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE-edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Group" content="SDS"/>
+    <meta name="author" content="seung"/>
+    <meta name="description" content="EgoSara S_Login 페이지"/>
+    <title>EgoSara - Customer Login</title>
+    <link rel="icon" href="/img/Fevicon.png" type="image/png">
+    <link rel="stylesheet" href="/vendors/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendors/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/vendors/themify-icons/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/linericon/style.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="/vendors/nice-select/nice-select.css">
+    <link rel="stylesheet" href="/vendors/nouislider/nouislider.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category" style="height: 200px">
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Login</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/index_move">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Login</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ end banner area ================= -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section-margin">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <div class="hover">
+                        <h4>EGOSARA 가 처음이신가요?</h4>
+                        <p>회원가입 후 다양한 상품과 레시피를 공유하세요!</p>
+                        <a class="button button-account" href="/cJoinForm">일반회원 회원가입</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner">
+                    <h3>일반회원 로그인하기</h3>
+                    <form class="row login_form" action="cLogin" id="contactForm" method="POST">
+                        <div class="col-md-12 form-group">
+                            <input type="text" class="form-control" name="cId" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input type="password" class="form-control" name="cPw" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="creat_account"></div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <button type="submit" value="submit" class="button button-login w-100">LOGIN</button>
+                            <a href="/sLoginForm">판매자로 로그인하기</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Login Box Area =================-->
+
+
+<!--================ Start footer Area  =================-->
+<footer class="footer">
+    <div class="footer-area">
+        <div class="container">
+            <div class="row section_gap">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title large_title">ENGINEER</h4>
+                        <p>
+                            우리 사이트의 엔지니어를 소개합니다!
+                        </p>
+                        <p>
+                            은비 - 여기에 완전 <br/>
+                            혜영 - 우리 자랑을  <br/>
+                            지영 - 다 쓰는거야 <br/>
+                            민정 - 초천재고 짱멋지고 <br/>
+                            승희 - 뭐 이런거~?
+                        </p>
+                    </div>
+                </div>
+                <div class="offset-lg-1 col-lg-2 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title">Quick Menu</h4>
+                        <ul class="list">
+
+                            <li><a href="/gList?gCate=0">상품</a></li>
+                            <li><a href="/rList">레시피</a></li>
+                            <li th:if="${session.loginId ne null || session.sloginId ne null}">
+                                <a th:if="${session.sloginId eq null && session.loginId ne null}" th:href="@{cView(cId=${session.loginId})}">마이페이지</a>
+                                <a th:if="${session.loginId eq null && session.sloginId ne null}" th:href="@{sView(sId=${session.sloginId})}">마이페이지</a>
+                            </li>
+                            <li><a href="/nList">공지사항</a></li>
+                            <li><a href="/qList">GnA</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    <div class="single-footer-widget instafeed">
+                        <h4 class="footer_title">PHOTO</h4>
+                        <ul class="list instafeed d-flex flex-wrap">
+
+                            <!-- 우리 사진 넣기!!! -->
+                            <li><img src="img/gallery/r1.jpg" alt=""></li>
+                            <li><img src="img/gallery/r2.jpg" alt=""></li>
+                            <li><img src="img/gallery/r3.jpg" alt=""></li>
+                            <li><img src="img/gallery/r5.jpg" alt=""></li>
+                            <li><img src="img/gallery/r7.jpg" alt=""></li>
+                            <li><img src="img/gallery/r8.jpg" alt=""></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title">Contact Us</h4>
+                        <div class="ml-40">
+                            <p class="sm-head">
+                                <span class="fa fa-location-arrow"></span>
+                                Office
+                            </p>
+                            <p>22223, 인천 미추홀구 매소홀로 488번길 6-32 태승빌딩 5층</p>
+
+
+                            <p class="sm-head">
+                                <span class="fa fa-envelope"></span>
+                                Email
+                            </p>
+                            <p>
+                                aksenclzlsvlwk@gmail.com <br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 부트스트랩 출처 -->
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row d-flex">
+                <p class="col-lg-12 footer-text text-center">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--================ End footer Area  =================-->
+
+<script src="/vendors/jquery/jquery-3.2.1.min.js"></script>
+<script src="/vendors/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/vendors/skrollr.min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/vendors/nice-select/jquery.nice-select.min.js"></script>
+<script src="/vendors/jquery.ajaxchimp.min.js"></script>
+<script src="/vendors/mail-script.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

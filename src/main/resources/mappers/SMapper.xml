@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.SDAO">
+
+    <insert id="sJoin" parameterType="smember">
+        INSERT INTO SMEMBER VALUES(#{sId}, #{sPw}, #{sName}, #{sPhone}, #{sAddr}, #{sEmail}, #{sNumber})
+    </insert>
+
+    <select id="idOverlap" parameterType="String" resultType="String">
+        SELECT SID FROM SMEMBER WHERE SID=#{sId}
+    </select>
+
+    <select id="sLogin" parameterType="smember" resultType="smember">
+        SELECT * FROM SMEMBER WHERE SID = #{sId}
+    </select>
+
+    <select id="sList" resultType="smember">
+        SELECT * FROM SMEMBER
+    </select>
+
+    <select id="sView" parameterType="String" resultType="smember">
+        SELECT * FROM SMEMBER WHERE SID=#{sId}
+    </select>
+
+    <update id="sModify" parameterType="smember">
+        UPDATE SMEMBER SET SPW=#{sPw}, SNAME=#{sName}, SPHONE=#{sPhone}, SADDR=#{sAddr}, SEMAIL=#{sEmail}, SNUMBER=#{sNumber} WHERE SID=#{sId}
+    </update>
+
+    <delete id="sDelete" parameterType="String">
+        DELETE FROM SMEMBER WHERE SID=#{sId}
+    </delete>
+</mapper>

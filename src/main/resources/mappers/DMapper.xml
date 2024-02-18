@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.DDAO">
+    <select id="checkDIB" parameterType="int" resultType="String">
+        SELECT DID FROM DIB WHERE DNUM = #{dNum}
+    </select>
+
+    <insert id="ooDIB" parameterType="dib">
+        INSERT INTO DIB VALUES (#{dNum}, #{dId})
+    </insert>
+
+    <delete id="xxDIB" parameterType="dib">
+        DELETE FROM DIB WHERE DNUM = #{dNum} AND DID = #{dId}
+    </delete>
+
+    <select id="getDibList" parameterType="String" resultType="goods">
+        SELECT G.GNUM, G.GID, G.GCATE, G.GNAME, G.GPRICE,G.GDATE, G.GSTOCK, G.GPHOTO
+        FROM GOODS G, CMEMBER M, DIB D
+        WHERE M.CID = D.DID  AND D.DNUM = G.GNUM AND DID = #{dId}
+    </select>
+
+    <delete id="dDelete" parameterType="dib">
+        DELETE FROM DIB WHERE DID = #{dId} AND DNUM = #{dNum}
+    </delete>
+
+</mapper>

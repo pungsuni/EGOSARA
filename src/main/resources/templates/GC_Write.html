@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상품리뷰 작성</title>
+</head>
+<body>
+<form action="gcWrite" method="POST" enctype="multipart/form-data">
+    <table>
+        <input type="hidden" name="gcId" th:value="${session.loginId}">
+        <input type="hidden" name="gcNum" th:value="${session.sessiongNum}">
+        <caption>상품 리뷰 작성</caption>
+        <tr>
+            <th>상품번호</th>
+            <td th:text="${session.sessiongNum}"></td>
+
+        </tr>
+        <tr>
+            <th>작성자</th>
+            <td th:text="${session.loginId}"></td>
+        </tr>
+        <tr>
+            <th>리뷰내용</th>
+            <td><textarea row="20" cols="40" name="gcContent"></textarea></td>
+        </tr>
+        <tr>
+            <th>별점</th>
+            <td>
+                <input type="radio" name="gcStar" value="1" >1점
+                <input type="radio" name="gcStar" value="2" >2점
+                <input type="radio" name="gcStar" value="3" >3점
+                <input type="radio" name="gcStar" value="4" >4점
+                <input type="radio" name="gcStar" value="5" >5점
+            </td>
+        </tr>
+        <tr>
+            <th>리뷰사진</th>
+            <td><input type="file" name="gcFile"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="작성"/></td>
+        </tr>
+
+    </table>
+</form>
+</body>
+</html>

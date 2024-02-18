@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.ODAO">
+    <select id="getBasketInfo" parameterType="String" resultType="basket">
+        SELECT M.CID AS BID, G.GNUM AS BNUM , G.GCATE AS BTYPE, G.GNAME AS BNAME, G.GPRICE AS BPRICE, B.BUYNO AS BUYNO, G.GSTOCK AS BSTOCK
+        FROM GOODS G, CMEMBER M, BASKET B
+        WHERE M.CID = B.BID AND B.BNUM = G.GNUM AND BID = #{BId}
+    </select>
+
+    <insert id="orderingEx" parameterType="ordering">
+        INSERT INTO ORDERING VALUES (#{ONum}, #{OId}, #{OBNum}, #{OBuyNo}, #{OPrice})
+    </insert>
+
+    <select id="bSelectList" parameterType="String" resultType="basket">
+        SELECT M.CID AS BID , G.GNUM AS BNUM, G.GCATE AS BTYPE, G.GNAME AS BNAME, G.GPRICE AS BPRICE , B.BUYNO, G.GSTOCK AS BSTOCK, B.BSELECT
+        FROM GOODS G, CMEMBER M, BASKET B
+        WHERE M.CID = B.BID AND B.BNUM = G.GNUM AND B.BID=#{BId} AND B.BSELECT = 'y'
+    </select>
+
+    <delete id="oBDelete" parameterType="basket">
+        DELETE FROM BASKET WHERE BID = #{BId} AND BNUM = #{BNum}
+    </delete>
+
+    <update id="oStockUpdate" parameterType="basket">
+        UPDATE GOODS SET GSTOCK = GSTOCK - #{BuyNo} WHERE GNUM = #{BNum}
+    </update>
+
+    <select id="getOrderList" resultType="dib" parameterType="String">
+        SELECT DISTINCT ONUM AS DID FROM ORDERING WHERE OID = #{OId}
+    </select>
+
+    <select id="getBNum" parameterType="String" resultType="orderingList">
+        SELECT G.GNUM AS OLBNUM, G.GCATE AS OLTYPE, G.GNAME AS OLNAME, G.GID AS OLSALER,O.OBUYNO AS OLBUYNO, G.GPRICE AS OLPRICE, G.GPHOTO AS OLPHOTO, O.OPRICE AS OLTOTALPRICE
+        FROM GOODS G, ORDERING O
+        WHERE O.OBNUM = G.GNUM AND ONUM = #{OlNum}
+    </select>
+</mapper>

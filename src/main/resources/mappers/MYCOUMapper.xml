@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.MYCOUDAO">
+
+    <insert id="mycouSave" parameterType="mycoupon">
+        INSERT INTO MYCOUPON VALUES(#{mcId}, #{mcNum})
+    </insert>
+
+    <select id="mycouList" parameterType="String" resultType="coupon">
+        SELECT CP.COUNUM, CP.COUNAME, CP.COUCONTENT, CP.COUPRICE
+        FROM COUPON CP, CMEMBER CM, MYCOUPON MY
+        WHERE MY.MCID = CM.CID AND MY.MCNUM = CP.COUNUM
+          AND MY.MCID = #{cId}
+    </select>
+
+    <delete id="mycouDelete">
+        DELETE FROM MYCOUPON WHERE MCID=#{cId} AND MCNUM=#{couNum}
+    </delete>
+</mapper>

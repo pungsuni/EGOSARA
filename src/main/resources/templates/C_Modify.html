@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>EGOSARA - MODIFY MY INFO </title>
+  <link rel="icon" href="img/Fevicon.png" type="image/png">
+  <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
+  <link rel="stylesheet" href="vendors/linericon/style.css">
+  <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
+  <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+  <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
+  <link rel="stylesheet" href="vendors/nouislider/nouislider.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!--================ Start Header Menu Area =================-->
+<header class="header_area">
+  <div class="main_menu">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand logo_h" href="/index_move"><img src="img/logo6.jpg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+          <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="/index_move">Home</a></li>
+            <li class="nav-item submenu dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">상품</a>
+              <ul class="dropdown-menu">
+                <li class="nav-item"><a class="nav-link" href="/gList?gCate=0">상품목록</a></li>
+                <!-- 업체 로그인 시에만-->
+                <li  th:if="${session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/writeForm">상품등록</a></li>
+
+              </ul>
+            </li>
+            <li class="nav-item submenu dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">레시피</a>
+              <ul class="dropdown-menu">
+                <li class="nav-item"><a class="nav-link" href="/rList">레시피목록</a></li>
+                <li th:if="${session.loginId ne null}" class="nav-item"><a class="nav-link" href="/rWriteForm">레시피등록</a></li>
+              </ul>
+            </li>
+            <!-- 로그인 했을 때만 마이페이지 뜨도록 -->
+            <li th:if="${session.loginId ne null || session.sloginId ne null}" class="nav-item submenu dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">마이페이지</a>
+              <ul class="dropdown-menu">
+                <!-- 관리자 일때 회원, 업체, 쿠폰 관리 -->
+                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/cList">회원 목록</a></li>
+                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/sList">업체 목록</a></li>
+
+                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/couList">쿠폰 목록</a></li>
+                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/couWriteForm">쿠폰 등록</a></li>
+
+                <!-- 회원일때는 회원-내정보 / 업체일때는 업체-내정보 -->
+                <li th:if="${session.sloginId eq null && session.loginId ne null}" class="nav-item"><a class="nav-link" th:href="@{cView(cId=${session.loginId})}">내정보</a></li>
+                <li th:if="${session.loginId eq null && session.sloginId ne null}" class="nav-item"><a class="nav-link" th:href="@{sView(sId=${session.sloginId})}">내정보</a></li>
+
+                <li class="nav-item"><a class="nav-link" th:href="@{mycouList(cId=${session.loginId})}">쿠폰함</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{getDibList(dId=${session.loginId})}">내찜목록</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{getOrderList(oId=${session.loginId})}">주문내역</a></li>
+
+                <li th:if="${session.loginId ne null}" class="nav-item"><a class="nav-link" href="/cLogout">로그아웃</a></li>
+                <li th:if="${session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/sLogout">로그아웃</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item submenu dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">고객센터</a>
+              <ul class="dropdown-menu">
+                <li class="nav-item"><a class="nav-link" href="/nList">공지사항 목록</a></li>
+                <li th:if="${session.loginId eq 'admin' || session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/nWriteForm">공지사항 작성</a></li>
+                <li class="nav-item"><a class="nav-link" href="/qList">QnA 목록</a></li>
+                <li th:if="${session.sloginId eq 'admin' || session.loginId ne null}" class="nav-item"><a class="nav-link" href="/qWriteForm">QNA 작성</a></li>
+
+              </ul>
+            </li>
+          </ul>
+
+          <!-- 장바구니 이동 -->
+          <ul class="nav-shop">
+            <li class="nav-item">
+              <a th:href="@{bView(bId=${session.loginId})}">
+                <button>
+                  <i class="ti-shopping-cart"> </i>
+                </button>
+              </a>
+            </li>
+            <!--
+                로그인, 회원가입 (아직 미완)
+                <button th:if="${session.loginId eq null && session.sloginId eq null}" onclick="location.href='cJoinForm'">회원가입</button>
+                <button th:if="${session.loginId eq null && session.sloginId eq null}" onclick="location.href='sJoinForm'">업체 회원가입</button>
+            -->
+            <li  class="nav-item" th:if="${session.loginId eq null && session.sloginId eq null}">
+              <a class="button button-header" href="/cLoginForm">LOGIN</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<!--================ End Header Menu Area =================-->
+
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category" style="height: 200px">
+  <div class="container h-100">
+    <div class="blog-banner">
+      <div class="text-center">
+        <h1>MODIFY</h1>
+        <nav aria-label="breadcrumb" class="banner-breadcrumb">
+<!--          <ol class="breadcrumb">-->
+<!--            <li class="breadcrumb-item active" aria-current="page">일반 회원수정</li>-->
+<!--          </ol>-->
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ================ end banner area ================= -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section-margin">
+  <div class="container">
+    <div class="row">
+      <!--            <div class="col-lg-6">-->
+      <!--                <div class="login_box_img">-->
+
+      <!--                    <div class="hover">-->
+      <!--                        <h4>계정이 있으신가염</h4>-->
+      <!--                        <p>아주좋은 제품들이 많아염</p>-->
+      <!--                        <a class="button button-account" href="login.html">로그인 하세염</a>-->
+      <!--                    </div>-->
+      <!--                </div>-->
+      <!--            </div>-->
+      <div class="col-lg-12">
+        <div class="login_form_inner register_form_inner">
+          <h3>MODIFY MY INFO</h3>
+          <form class="row login_form" action="cModify" id="register_form" method="POST" enctype="multipart/form-data">
+
+
+            <div class="col-md-12 form-group">
+              <input type="hidden" class="form-control" name="cId" th:text="${cmember.cId}" th:value="${cmember.cId}" id="cId" onkeyup="idOverlap()" placeholder="Id" >
+              <span id="confirmId"></span>
+            </div>
+
+
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" name="cNickname" th:placeholder="${cmember.cNickname}"  placeholder="Nickname" id="cNickname" onkeyup="nickOverlap()">
+              <span id="confirmNick"></span>
+            </div>
+
+
+
+
+            <div class="col-md-12 form-group">
+              <input type="password" class="form-control" name="cPw" id="cPw" onkeyup="pwRegExp()" placeholder="Password" >
+              <span id="pwRegExp"></span>
+            </div>
+
+
+
+            <div class="col-md-12 form-group">
+              <input type="password" class="form-control" id="checkPw" onkeyup="pwOverlap()" placeholder="Password확인" >
+              <span id="confirmPw"></span>
+            </div>
+
+
+
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" name="cName" th:placeholder="${cmember.cName}">
+            </div>
+
+
+            <div class="col-md-12 form-group">
+              <input type="date" class="form-control" name="cBirth" th:placeholder="${cmember.cBirth}"  >
+            </div>
+
+
+
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" name="cPhone" th:placeholder="${cmember.cPhone}">
+            </div>
+
+
+            <!-- 주소 -->
+
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="sample6_postcode" placeholder="우편번호" name="addr1" >
+            </div>
+
+            <div class="col-md-12 form-group">
+              <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+            </div>
+
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="sample6_address" placeholder="주소" name="addr2"  >
+            </div>
+
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="sample6_detailAddress" placeholder="상세주소" name="addr3" >
+            </div>
+
+
+
+            <div class="col-md-12 form-group">
+              <input type="email" class="form-control" name="cEmail" id="cEmail" th:placeholder="${cmember.cEmail}">
+              <span id="emailConfirmText"><input type="button" value="인증" onclick="confirmEmail()"></span>
+
+            </div>
+
+
+
+
+            <div class="col-md-12 form-group">
+              <input type="file" class="form-control" placeholder="프로필" name="cProfile">
+            </div>
+
+
+
+            <div class="col-md-12 form-group">
+              <button type="submit" value="회원수정" class="button button-login w-100">수정</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--================End Login Box Area =================-->
+
+
+
+<!--================ Start footer Area  =================-->
+<footer class="footer">
+  <div class="footer-area">
+    <div class="container">
+      <div class="row section_gap">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="single-footer-widget tp_widgets">
+            <h4 class="footer_title large_title">COMPANY</h4>
+            <p>
+              우리 사이트를 소개합니다!
+            </p>
+            <p>
+              장소와 시간의 제약없이<br/>간편하게 장을 볼 수 있음과 동시에<br/>다양한 레시피를 공유하는 사이트
+
+            </p>
+          </div>
+        </div>
+        <div class="offset-lg-1 col-lg-2 col-md-6 col-sm-6">
+          <div class="single-footer-widget tp_widgets">
+            <h4 class="footer_title">Quick Menu</h4>
+            <ul class="list">
+
+              <li><a href="/gList?gCate=0">GOODS</a></li>
+              <li><a href="/rList">RECIPE</a></li>
+              <li th:if="${session.loginId ne null || session.sloginId ne null}">
+                <a th:if="${session.sloginId eq null && session.loginId ne null}" th:href="@{cView(cId=${session.loginId})}">마이페이지</a>
+                <a th:if="${session.loginId eq null && session.sloginId ne null}" th:href="@{sView(sId=${session.sloginId})}">마이페이지</a>
+              </li>
+              <li><a href="/nList">NOTICE</a></li>
+              <li><a href="/qList">QNA</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
+          <div class="single-footer-widget tp_widgets">
+            <h4 class="footer_title">Contact Us</h4>
+            <div class="ml-40">
+              <p class="sm-head">
+                <span class="fa fa-location-arrow"></span>
+                Office
+              </p>
+              <p>22223, 인천 미추홀구 매소홀로 488번길 6-32 태승빌딩 5층
+                <br/>인천일보 아카데미
+              </p>
+
+
+              <p class="sm-head">
+                <span class="fa fa-envelope"></span>
+                Email
+              </p>
+              <p>
+                aksenclzlsvlwk@gmail.com <br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 부트스트랩 출처 -->
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="row d-flex">
+        <p class="col-lg-12 footer-text text-center">
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+      </div>
+    </div>
+  </div>
+</footer>
+<!--================ End footer Area  =================-->
+
+
+
+<script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="vendors/skrollr.min.js"></script>
+<script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+<script src="vendors/jquery.ajaxchimp.min.js"></script>
+<script src="vendors/mail-script.js"></script>
+<script src="js/main.js"></script>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+  // 아이디 중복체크
+  function idOverlap(){
+    let idCheck = document.getElementById("cId").value;
+    let confirmId = document.getElementById("confirmId");
+    let idPass = false;
+
+    $.ajax({
+      type : "POST" ,
+      url : "A_idoverlap" ,
+      data : { "cId" : idCheck } ,
+      async : false,
+      dataType : "text" ,
+      success : function(data){
+        // 성공시
+        if(data=="OK"){
+          confirmId.style.color="#0000ff";
+          confirmId.innerHTML = "사용가능한 아이디";
+          idPass = true;
+
+        } else {
+          confirmId.style.color="#ff0000";
+          confirmId.innerHTML = "사용 불가능한 아이디";
+          idPass = false;
+        }
+      },
+      error : function(){
+        // 실패시
+        alert("idOverlap함수 통신실패!");
+      }
+    });
+
+    return idPass;
+  }
+
+  // 닉네임 중복체크
+  function nickOverlap(){
+    let nickCheck = document.getElementById("cNickname").value;
+    let confirmNick = document.getElementById("confirmNick");
+    let nickPass = false;
+
+    $.ajax({
+      type : "POST" ,
+      url : "A_nickoverlap" ,
+      data : { "cNickname" : nickCheck } ,
+      async : false,
+      dataType : "text" ,
+      success : function(data){
+        // 성공시
+        if(data=="OK"){
+          confirmNick.style.color="#0000ff";
+          confirmNick.innerHTML = "사용가능한 닉네임";
+          nickPass = true;
+
+        } else {
+          confirmNick.style.color="#ff0000";
+          confirmNick.innerHTML = "사용 불가능한 닉네임";
+          nickPass = false;
+        }
+      },
+      error : function(){
+        // 실패시
+        alert("nickOverlap함수 통신실패!");
+      }
+    });
+
+    return nickPass;
+  }
+
+  // 비밀번호 정규식
+  function pwRegExp() {
+    let cPw = document.getElementById("cPw").value;
+    let pwRegExp = document.getElementById("pwRegExp");
+    let pwPass = false;
+
+    let num = cPw.search(/[0-9]/g);
+    let eng = cPw.search(/[a-z]/ig);
+    let spe = cPw.search(/[`~!@#$%^&*|\\\'\";:\/?]/gi);
+
+    if(cPw.length < 8 || cPw.length > 15){
+      pwRegExp.style.color="#ff0000";
+      pwRegExp.innerHTML = "8자리 ~ 15자리 이내로 입력해주세요!";
+    } else if(cPw.search(/\s/) != -1) {
+      pwRegExp.style.color="#ff0000";
+      pwRegExp.innerHTML = "비밀번호는 공백 없이 입력해주세요!";
+    } else if(num < 0 || eng < 0 || spe < 0){
+      pwRegExp.style.color="#ff0000";
+      pwRegExp.innerHTML = "영문, 숫자, 특수문자를 혼합하여 입력해주세요!";
+    } else {
+      pwRegExp.style.color="#0000ff";
+      pwRegExp.innerHTML = "적절한 비밀번호 입니다!";
+      pwPass = true;
+    }
+
+    return pwPass;
+
+  }
+
+  // 비밀번호 일치여부 확인
+  function pwOverlap(){
+    let cPw = document.getElementById("cPw").value;
+    let pwRegExp = document.getElementById("pwRegExp");
+
+    let checkPw = document.getElementById("checkPw").value;
+    let confirmPw = document.getElementById("confirmPw");
+
+    let pwPass = false;
+
+    pwRegExp.innerHTML = "";
+
+    if(cPw==checkPw){
+      confirmPw.style.color = "#0000ff";
+      confirmPw.innerHTML = "비밀번호가 일치합니다!"
+      pwPass = true;
+
+    } else {
+      confirmPw.style.color = "#ff0000";
+      confirmPw.innerHTML = "비밀번호를 확인해주세요!"
+    }
+    return pwPass;
+  }
+
+  // 이메일 인증
+  function confirmEmail(){
+    // aa라는 변수에 id cEmail를 저장
+    let aa = document.getElementById("cEmail").value;
+    // bb라는 변수에 id emailConfirmText를 저장
+    let bb = document.getElementById("emailConfirmText");
+
+    $.ajax({
+      type : "GET" ,
+      url : "cEmailConfirm" ,
+      data : {"cEmail" : aa} ,
+      dataType : "text" ,
+      success : function(uuid){
+        alert("입력하신 이메일로 인증번호가 발송됐습니다!");
+        bb.innerHTML = "<input type='hidden' id='check2' value='" + uuid + "'>"
+                + "<br/><input type='text' placeholder='인증번호 입력' id='emailKey'>"
+                + " <input type='button' value='확인' onclick='keyCheck()'>"
+                + "<br/><span id='check1'></span>";
+      } ,
+      error : function(){
+        alert("인증번호 발송에 실패했습니다!");
+      }
+    });
+
+  }
+
+  // 인증번호 확인
+  function keyCheck(uuid){
+    let emailKey = document.getElementById("emailKey").value;
+    let check2 = document.getElementById("check2").value;
+    let check1 = document.getElementById("check1");
+
+    let emailPass = false;
+
+    if(emailKey==check2) {
+      check1.style.color = "#0000ff";
+      check1.innerHTML = "인증번호가 일치합니다!";
+      emailPass = true;
+    } else{
+      check1.style.color = "#ff0000";
+      check1.innerHTML = "인증번호가 일치하지 않습니다!";
+    }
+    return emailPass;
+  }
+
+  // 회원가입 버튼
+  function cJoin() {
+    console.log("아이디 체크 : " + idOverlap());
+    console.log("비밀번호 체크1 : " + pwRegExp());
+    console.log("비밀번호 체크2 : " + pwOverlap());
+
+    if(!idOverlap()){
+      alert("아이디 중복체크를 진행해주세요.");
+    } else if(!pwRegExp()){
+      alert("비밀번호를 규칙에 맞게 입력해주세요.");
+    } else if(!pwOverlap()){
+      alert("비밀번호가 일치하지 않습니다.");
+    } else {
+      joinForm.submit();
+    }
+
+  }
+
+
+</script>
+
+
+
+</html>

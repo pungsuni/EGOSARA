@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EGOSARA - ORDER CHECK</title>
+    <link rel="icon" href="img/Fevicon.png" type="image/png">
+    <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
+    <link rel="stylesheet" href="vendors/linericon/style.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
+    <link rel="stylesheet" href="vendors/nouislider/nouislider.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        table {
+            width: 100%;
+            border-top: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        tr{
+            border-bottom: 1px solid #444444;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<!--================ Start Header Menu Area =================-->
+<header class="header_area">
+    <div class="main_menu">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand logo_h" href="/index_move"><img src="img/logo6.jpg" alt=""></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+                        <li class="nav-item active"><a class="nav-link" href="/index_move">Home</a></li>
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">상품</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="/gList?gCate=0">상품목록</a></li>
+                                <!-- 업체 로그인 시에만-->
+                                <li  th:if="${session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/writeForm">상품등록</a></li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">레시피</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="/rList">레시피목록</a></li>
+                                <li th:if="${session.loginId ne null}" class="nav-item"><a class="nav-link" href="/rWriteForm">레시피등록</a></li>
+                            </ul>
+                        </li>
+                        <!-- 로그인 했을 때만 마이페이지 뜨도록 -->
+                        <li th:if="${session.loginId ne null || session.sloginId ne null}" class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">마이페이지</a>
+                            <ul class="dropdown-menu">
+                                <!-- 관리자 일때 회원, 업체, 쿠폰 관리 -->
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/cList">회원 목록</a></li>
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/sList">업체 목록</a></li>
+
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/couList">쿠폰 목록</a></li>
+                                <li th:if="${session.sloginId eq 'admin'}" class="nav-item"><a class="nav-link" href="/couWriteForm">쿠폰 등록</a></li>
+
+                                <!-- 회원일때는 회원-내정보 / 업체일때는 업체-내정보 -->
+                                <li th:if="${session.sloginId eq null && session.loginId ne null}" class="nav-item"><a class="nav-link" th:href="@{cView(cId=${session.loginId})}">내정보</a></li>
+                                <li th:if="${session.loginId eq null && session.sloginId ne null}" class="nav-item"><a class="nav-link" th:href="@{sView(sId=${session.sloginId})}">내정보</a></li>
+
+                                <li class="nav-item"><a class="nav-link" th:href="@{mycouList(cId=${session.loginId})}">쿠폰함</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{getDibList(dId=${session.loginId})}">내찜목록</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{getOrderList(oId=${session.loginId})}">주문내역</a></li>
+
+                                <li th:if="${session.loginId ne null}" class="nav-item"><a class="nav-link" href="/cLogout">로그아웃</a></li>
+                                <li th:if="${session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/sLogout">로그아웃</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item submenu dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">고객센터</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="/nList">공지사항 목록</a></li>
+                                <li th:if="${session.loginId eq 'admin' || session.sloginId ne null}" class="nav-item"><a class="nav-link" href="/nWriteForm">공지사항 작성</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/qList">QnA 목록</a></li>
+                                <li th:if="${session.sloginId eq 'admin' || session.loginId ne null}" class="nav-item"><a class="nav-link" href="/qWriteForm">QNA 작성</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- 장바구니 이동 -->
+                    <ul class="nav-shop">
+                        <li class="nav-item">
+                            <a th:href="@{bView(bId=${session.loginId})}">
+                                <button>
+                                    <i class="ti-shopping-cart"> </i>
+                                </button>
+                            </a>
+                        </li>
+                        <!--
+                            로그인, 회원가입 (아직 미완)
+                            <button th:if="${session.loginId eq null && session.sloginId eq null}" onclick="location.href='cJoinForm'">회원가입</button>
+                            <button th:if="${session.loginId eq null && session.sloginId eq null}" onclick="location.href='sJoinForm'">업체 회원가입</button>
+                        -->
+                        <li  class="nav-item" th:if="${session.loginId eq null && session.sloginId eq null}">
+                            <a class="button button-header" href="/cLoginForm">LOGIN</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<!--================ End Header Menu Area =================-->
+
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category" style="height: 200px">
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>ORDER CHECK</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ end banner area ================= -->
+
+
+
+<!--================Cart Area =================-->
+<form action="orderingExcu" method="post">
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">종류</th>
+                            <th scope="col">상품이름</th>
+                            <th scope="col">가격</th>
+                            <th scope="col">선택수량</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <div class="media">
+
+                                <input type="hidden" name="bId" th:value="${session.loginId}" />
+
+                                <tr th:each="view : ${basList}">
+                                <td th:text="${view.bType}"></td>
+                                <td th:text="${view.bName}"></td>
+                                <td th:text="${view.bPrice}"></td>
+                                <td th:text="${view.buyNo}"></td>
+
+                                <input type="hidden" name="bNum" th:value="${view.bNum}" />
+                                <input type="hidden" name="bType" th:value="${view.bType}" />
+                                <input type="hidden" name="bName" th:value="${view.bName}" />
+                                <input type="hidden" name="bPrice" th:value="${view.bPrice}" />
+                                <input type="hidden" name="buyNo" th:value="${view.buyNo}" />
+                                <input type="hidden" name="bStock" th:value="${view.bStock}" />
+
+                                </tr>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center" style="width: 100%">
+
+            <div style="width: 30%; float:none; margin:0 auto" >
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" class="button button-hero" value="결제하기" />
+                    </td>
+                </tr>
+                <div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+<!--================End Cart Area =================-->
+
+
+
+<!--================ Start footer Area  =================-->
+<footer class="footer">
+    <div class="footer-area">
+        <div class="container">
+            <div class="row section_gap">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title large_title">COMPANY</h4>
+                        <p>
+                            우리 사이트를 소개합니다!
+                        </p>
+                        <p>
+                            장소와 시간의 제약없이<br/>간편하게 장을 볼 수 있음과 동시에<br/>다양한 레시피를 공유하는 사이트
+
+                        </p>
+                    </div>
+                </div>
+                <div class="offset-lg-1 col-lg-2 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title">Quick Menu</h4>
+                        <ul class="list">
+
+                            <li><a href="/gList?gCate=0">GOODS</a></li>
+                            <li><a href="/rList">RECIPE</a></li>
+                            <li th:if="${session.loginId ne null || session.sloginId ne null}">
+                                <a th:if="${session.sloginId eq null && session.loginId ne null}" th:href="@{cView(cId=${session.loginId})}">마이페이지</a>
+                                <a th:if="${session.loginId eq null && session.sloginId ne null}" th:href="@{sView(sId=${session.sloginId})}">마이페이지</a>
+                            </li>
+                            <li><a href="/nList">NOTICE</a></li>
+                            <li><a href="/qList">QNA</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
+                    <div class="single-footer-widget tp_widgets">
+                        <h4 class="footer_title">Contact Us</h4>
+                        <div class="ml-40">
+                            <p class="sm-head">
+                                <span class="fa fa-location-arrow"></span>
+                                Office
+                            </p>
+                            <p>22223, 인천 미추홀구 매소홀로 488번길 6-32 태승빌딩 5층
+                                <br/>인천일보 아카데미
+                            </p>
+
+
+                            <p class="sm-head">
+                                <span class="fa fa-envelope"></span>
+                                Email
+                            </p>
+                            <p>
+                                aksenclzlsvlwk@gmail.com <br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row d-flex">
+                <p class="col-lg-12 footer-text text-center">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--================ End footer Area  =================-->
+
+
+
+<script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="vendors/skrollr.min.js"></script>
+<script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+<script src="vendors/jquery.ajaxchimp.min.js"></script>
+<script src="vendors/mail-script.js"></script>
+<script src="js/main.js"></script>
+</body>
+
+</html>

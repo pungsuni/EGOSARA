@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sds.egosara.dao.RDAO">
+
+    <!-- 레시피 작성 -->
+    <insert id="rWrite" parameterType="recipe">
+        INSERT INTO RECIPE VALUES(RECIPE_SEQ.NEXTVAL, #{rId}, #{rName}, #{rLevel}, #{rType}, #{rFood}, #{rOven}, #{rAmount}, #{rTime}, #{rContent}, #{rPhotoName1 ,jdbcType=VARCHAR}, #{rPhotoName2 ,jdbcType=VARCHAR}, #{rPhotoName3 ,jdbcType=VARCHAR}, #{rTag}, SYSDATE, 0, 0, 0)
+    </insert>
+
+    <!-- 레시피 목록 -->
+    <select id="rList" resultType="recipe">
+        SELECT * FROM RECIPE ORDER BY RNUM DESC
+    </select>
+
+    <!-- 레시피 조회수 증가 -->
+    <update id="rHit" parameterType="int">
+        UPDATE RECIPE SET RHIT = RHIT + 1 WHERE RNUM=#{rNum}
+    </update>
+
+    <!-- 레시피 상세 보기 -->
+    <select id="rView" parameterType="int" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RNUM=#{rNum}
+    </select>
+
+    <!-- 레시피 수정 -->
+    <update id="rModify" parameterType="recipe">
+        UPDATE RECIPE SET RNAME=#{rName}, RLEVEL=#{rLevel}, RTYPE=#{rType}, RFOOD=#{rFood}, ROVEN=#{rOven}, RAMOUNT=#{rAmount}, RTIME=#{rTime}, RCONTENT=#{rContent}, RPHOTONAME1=#{rPhotoName1 ,jdbcType=VARCHAR}, RPHOTONAME2=#{rPhotoName2 ,jdbcType=VARCHAR}, RPHOTONAME3=#{rPhotoName3 ,jdbcType=VARCHAR}, RTAG=#{rTag}  WHERE RID=#{rId} AND RNUM=#{rNum}
+    </update>
+
+    <!-- 레시피 삭제 -->
+    <delete id="rDelete" parameterType="int">
+        DELETE FROM RECIPE WHERE RNUM=#{rNum}
+    </delete>
+
+    <!--/* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 */-->
+
+    <!-- 나의 좋아요 클릭 여부 -->
+    <select id="sLike" parameterType="like" resultType="String">
+        SELECT LHEART FROM RLIKE WHERE LRNUM=#{lrNum} AND LID =#{lId}
+    </select>
+
+    <!--게시글 전체 좋아요 가져오기 -->
+    <select id="getLike" parameterType="like" resultType="String">
+        SELECT RLIKE FROM RECIPE WHERE RNUM=#{lrNum}
+    </select>
+
+    <!-- 처음 좋아요 활성화(0) -->
+    <insert id="setLike1" parameterType="like">
+        INSERT INTO RLIKE VALUES(#{lrNum}, #{lId}, 0)
+    </insert>
+
+    <!-- 좋아요 on (1) -->
+    <update id="onLike" parameterType="like">
+        UPDATE RLIKE SET LHEART = '1' WHERE LRNUM=#{lrNum} AND LID=#{lId}
+    </update>
+
+    <!-- 게시글 전체 좋아요 수 +1 -->
+    <update id="plus1" parameterType="like">
+        UPDATE RECIPE SET RLIKE = RLIKE +1 WHERE RNUM=#{lrNum}
+    </update>
+
+    <!-- 저장된 좋아요가 무엇인지 확인 -->
+    <select id="result" parameterType="like" resultType="like">
+        SELECT * FROM RLIKE WHERE LRNUM=#{lrNum} AND LID=#{lId}
+    </select>
+
+    <!-- 좋아요 off(2) -->
+    <update id="offLike" parameterType="like">
+        UPDATE RLIKE SET LHEART = '2' WHERE LRNUM=#{lrNum} AND LID=#{lId}
+    </update>
+
+    <!-- 게시글 전체 좋아요 수 -1 -->
+    <update id="minus1" parameterType="like">
+        UPDATE RECIPE SET RLIKE = RLIKE -1 WHERE RNUM=#{lrNum}
+    </update>
+
+    <!--/* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 *//* 좋아요 */-->
+
+
+    <!-- 댓글리스트 불러오기 -->
+    <select id="rcList" parameterType="int" resultType="rComment">
+        SELECT * FROM RCOMMENT WHERE RNO=#{rNo} ORDER BY RCNUM DESC
+    </select>
+
+    <!-- 대댓글 리스트 불러오기 -->
+    <select id="reList" parameterType="reComment" resultType="reComment">
+        SELECT * FROM RECOMMENT WHERE RCNUMBER=#{rcNumber} AND RCNO=#{rcNo} ORDER BY RCNO
+    </select>
+
+    <!--중복댓글 처리-->
+    <select id="rIdCheck" parameterType="rComment" resultType="rComment">
+        SELECT * FROM RCOMMENT WHERE RNO=#{rNo} AND RCID=#{rcId}
+    </select>
+
+    <!-- 댓글 작성 -->
+    <insert id="rcWrite" parameterType="rComment">
+        INSERT INTO RCOMMENT VALUES(#{rNo}, RCOMMENT_SEQ.NEXTVAL, #{rcId}, #{rcContent}, #{rcStar}, SYSDATE)
+    </insert>
+
+    <!-- 댓글 삭제 -->
+    <delete id="rcDelete" parameterType="rComment">
+        DELETE FROM RCOMMENT WHERE RCNUM=#{rcNum}
+    </delete>
+
+    <!-- 레시피 별점 평점 업데이트 -->
+    <update id="rAvg" parameterType="rComment">
+        UPDATE RECIPE SET RSTAR=(SELECT AVG(RCSTAR) FROM RCOMMENT WHERE RNO=#{rNo}) WHERE RNUM=#{rNo}
+    </update>
+
+    <!-- 만약 리스트가 비어있다면 -->
+    <update id="zero" parameterType="rComment">
+        UPDATE RECIPE SET RSTAR = 0 WHERE RNUM=#{rNo}
+    </update>
+
+    <!-- 대댓글 작성 -->
+    <insert id="reWrite" parameterType="reComment">
+        INSERT INTO RECOMMENT VALUES(#{rcNumber}, #{rcNo}, RECOMMENT_SEQ.NEXTVAL, #{reId}, #{reContent}, SYSDATE)
+    </insert>
+
+
+
+
+
+
+    <!-- 요리이름으로 검색 -->
+    <select id="rSearchName" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RNAME LIKE '%'||#{keyword}||'%' ORDER BY RNUM DESC
+    </select>
+
+    <!-- 아이디로 검색 -->
+    <select id="rSearchId" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RID LIKE '%'||#{keyword}||'%' ORDER BY RNUM DESC
+    </select>
+
+    <!-- 해시태그로 검색 -->
+    <select id="rSearchTag" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RTAG LIKE '%'||#{keyword}||'%' ORDER BY RNUM DESC
+    </select>
+
+    <!-- 상세검색 -->
+
+    <!-- 모두 상세검색-->
+    <select id="all" resultType="recipe">
+        SELECT * FROM RECIPE
+    </select>
+
+    <!-- 시간으로만 검색 -->
+    <select id="rTime" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RTIME <![CDATA[<=]]> #{rTime}
+    </select>
+
+    <!-- 메인메뉴로만 검색 -->
+    <select id="rFood" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RFOOD=#{rFood}
+    </select>
+
+    <!-- 메인메뉴, 시간으로 검색 -->
+    <select id="rFT" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RFOOD=#{rFood} AND RTIME <![CDATA[<=]]> #{rTime}
+    </select>
+
+    <!-- 종류로만 검색 -->
+    <select id="rType" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RTYPE=#{rType}
+    </select>
+
+    <!-- 종류, 시간으로 검색 -->
+    <select id="rTT" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RTYPE=#{rType} AND RTIME <![CDATA[<=]]> #{rTime}
+    </select>
+
+    <!-- 종류, 메인으로 검색 -->
+    <select id="rTF" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RTYPE=#{rType} AND RFOOD=#{rFood}
+    </select>
+
+    <!-- 모두 상세검색 -->
+    <select id="rSelect" parameterType="String" resultType="recipe">
+        SELECT * FROM RECIPE WHERE RTYPE=#{rType} AND RFOOD=#{rFood} AND RTIME <![CDATA[<=]]> #{rTime}
+    </select>
+
+
+
+
+
+
+
+</mapper>
